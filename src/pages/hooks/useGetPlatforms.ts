@@ -2,8 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { platformsKeys } from "./queryKeys";
 import { PlatformsApiResponse } from "../types/platforms";
-
-export const apiKey = "c3a8420f4b8c4fc19ce9828a7773deee";
+import { apiKey } from "./useGetGames";
 
 export const getPlatformsFn = async () => {
   const response = await axios.get<PlatformsApiResponse>(

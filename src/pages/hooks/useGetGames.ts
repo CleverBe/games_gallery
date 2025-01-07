@@ -69,8 +69,7 @@ export const useGetGames = ({
     queryFn: ({ pageParam = 1 }) =>
       getGamesFn({ pageParam, search, platform, genre }),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
-      console.log({ lastPage, allPages, lastPageParam, allPagesParams });
+    getNextPageParam: (lastPage, _, lastPageParam) => {
       return lastPage.next ? lastPageParam + 1 : undefined;
     },
   });
