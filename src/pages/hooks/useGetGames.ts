@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { gamesKeys } from "./queryKeys";
 import { GamesApiResponse } from "../types/games";
@@ -6,25 +6,23 @@ import { GamesApiResponse } from "../types/games";
 export const apiKey = "c3a8420f4b8c4fc19ce9828a7773deee";
 
 interface IgetGamesFn {
-  page: number;
-  page_size: number;
-  search: string;
-  platform: string;
-  genre: string;
+  pageParam: number;
+  search?: string;
+  platform?: string;
+  genre?: string;
 }
 
 export const getGamesFn = async ({
-  page = 1,
-  page_size = 10,
-  search = "",
-  platform = "",
-  genre = "",
+  pageParam = 1,
+  search,
+  platform,
+  genre,
 }: IgetGamesFn) => {
   const params = new URLSearchParams();
 
-  params.append("page", page.toString());
+  params.append("page", pageParam.toString());
 
-  params.append("page_size", page_size.toString());
+  params.append("page_size", "16");
 
   if (search) {
     params.append("search", search);
@@ -50,7 +48,6 @@ export const getGamesFn = async ({
 
 interface IuseGetGames {
   page: number;
-  pageSize: number;
   search: string;
   platform: string;
   genre: string;
@@ -58,26 +55,23 @@ interface IuseGetGames {
 
 export const useGetGames = ({
   page,
-  pageSize,
   search,
   platform,
   genre,
 }: IuseGetGames) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: gamesKeys.list({
       page,
-      page_size: pageSize,
       search,
       platform,
       genre,
     }),
-    queryFn: () =>
-      getGamesFn({
-        page,
-        page_size: pageSize,
-        search,
-        platform,
-        genre,
-      }),
+    queryFn: ({ pageParam = 1 }) =>
+      getGamesFn({ pageParam, search, platform, genre }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
+      console.log({ lastPage, allPages, lastPageParam, allPagesParams });
+      return lastPage.next ? lastPageParam + 1 : undefined;
+    },
   });
 };

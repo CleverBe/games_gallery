@@ -24,7 +24,10 @@ function App() {
   return (
     <Providers>
       <div className="bg-background">
-        <main className="container mx-auto min-h-screen border-x p-4">
+        <header className="container mx-auto flex flex-wrap items-center justify-between space-y-4 border border-t-0 bg-black p-4 sm:space-y-0">
+          <div className="text-3xl">GamesApp</div>
+        </header>
+        <main className="container mx-auto min-h-screen border-x px-4">
           <HomePage />
         </main>
       </div>

@@ -36,7 +36,7 @@ export interface Game {
   reviews_count: number;
   saturated_color: string;
   dominant_color: string;
-  platforms: Platform[];
+  platforms: GamePlatform[];
   parent_platforms: ParentPlatform[];
   genres: Genre[];
   stores: Store[];
@@ -62,7 +62,7 @@ export interface AddedByStatus {
   playing: number;
 }
 
-export interface Platform {
+export interface GamePlatform {
   platform: Platform2;
   released_at: string;
   requirements_en?: RequirementsEn;

@@ -1,12 +1,13 @@
-import { Input } from "@/components/ui/input";
 import { useGetGames } from "./hooks/useGetGames";
-import { GameCard, GameCardSkeleton } from "./components/GameCard";
+import { GameCardSkeleton } from "./components/GameCard";
 import { useEffect, useState } from "react";
-import { Combobox } from "@/components/ui/combobox";
 import { useGetPlatforms } from "./hooks/useGetPlatforms";
 import { useGetGenres } from "./hooks/useGetGenres";
 import { GameModal } from "./components/GameModal";
 import { Game } from "./types/games";
+import { LoadMoreTrigger } from "./components/LoadMoreTrigger";
+import { GameFilters } from "./components/GameFilters";
+import { GamesList } from "./components/GamesList";
 
 export const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,13 +25,20 @@ export const HomePage = () => {
     return () => clearTimeout(handler);
   }, [search]);
 
-  const { data: games, isLoading } = useGetGames({
+  const {
+    data: games,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useGetGames({
     page: 1,
-    pageSize: 10,
     search: debouncedSearch,
     platform,
     genre,
   });
+
+  const flattenedGames = games?.pages.flatMap((page) => page.results) || [];
 
   const { data: platforms } = useGetPlatforms();
 
@@ -50,60 +58,35 @@ export const HomePage = () => {
 
   return (
     <div>
-      <header className="flex flex-wrap items-center justify-between space-y-4 rounded-md border p-4 sm:space-y-0">
-        <div className="text-3xl">GamesApp</div>
-        <div className="w-full sm:w-96">
-          <Input
-            type="text"
-            placeholder="Minecraft, Fortnite, etc"
-            className="sm:w-96"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </header>
       <div className="p-4">
-        <div className="mb-4 flex flex-wrap gap-4">
-          <div className="flex flex-col space-y-2">
-            <h2 className="px-0.5 text-xl">Platforms</h2>
-            <Combobox
-              value={platform}
-              setValue={setPlatform}
-              options={mapPlatforms}
-              placeholder="Platforms"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <h2 className="px-0.5 text-xl">Genres</h2>
-            <Combobox
-              value={genre}
-              setValue={setGenre}
-              options={mapGenres}
-              placeholder="Genres"
-            />
-          </div>
-        </div>
-        {isLoading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((index) => (
-              <GameCardSkeleton key={index} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {games?.results.map((game) => (
-              <GameCard
-                key={game.id}
-                game={game}
-                onClick={() => {
-                  setSelectedGame(game);
-                  setIsOpen(true);
-                }}
-              />
-            ))}
-          </div>
-        )}
+        <GameFilters
+          platform={platform}
+          setPlatform={setPlatform}
+          genre={genre}
+          setGenre={setGenre}
+          platforms={mapPlatforms}
+          genres={mapGenres}
+          search={search}
+          setSearch={setSearch}
+        />
+        <GamesList
+          games={flattenedGames}
+          isLoading={isLoading}
+          setIsOpen={setIsOpen}
+          setSelectedGame={setSelectedGame}
+        />
       </div>
+
+      {hasNextPage && <LoadMoreTrigger fetchNextPage={fetchNextPage} />}
+
+      {isFetchingNextPage && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <GameCardSkeleton key={index} />
+          ))}
+        </div>
+      )}
+
       {selectedGame && (
         <GameModal
           game={selectedGame}

@@ -24,7 +24,7 @@ export const GameCard = ({
       <img
         src={game.background_image}
         alt={game.name}
-        className="h-72 w-full rounded-t-xl object-cover object-center"
+        className="h-60 w-full rounded-t-xl object-cover object-center"
       />
       <CardHeader>
         <CardTitle>{game.name}</CardTitle>
@@ -35,7 +35,7 @@ export const GameCard = ({
               <span className="text-sm">{game.rating}</span>
             </div>
             <div className="flex items-center space-x-0.5">
-              <MessageCircleMore className="h-4 w-4" />
+              <MessageCircleMore className="h-4 w-4 text-white" />
               <span className="text-sm">{game.ratings_count}</span>
             </div>
             <div className="flex items-center space-x-0.5">

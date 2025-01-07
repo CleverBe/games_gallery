@@ -23,6 +23,7 @@ export interface ComboboxProps {
   placeholder?: string;
   value: string;
   setValue: (value: string) => void;
+  className?: string;
 }
 
 export const Combobox = ({
@@ -30,6 +31,7 @@ export const Combobox = ({
   setValue,
   options,
   placeholder = "",
+  className,
 }: ComboboxProps) => {
   const [open, setOpen] = useState(false);
 
@@ -50,7 +52,7 @@ export const Combobox = ({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={cn("w-[200px] p-0", className)}>
         <Command>
           <CommandInput placeholder="Search..." className="h-9" />
           <CommandList>

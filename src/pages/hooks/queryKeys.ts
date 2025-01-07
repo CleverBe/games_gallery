@@ -1,6 +1,5 @@
 interface IGameKeysList {
   page: number;
-  page_size: number;
   search: string;
   platform: string;
   genre: string;
@@ -8,13 +7,12 @@ interface IGameKeysList {
 
 export const gamesKeys = {
   all: ["games"] as const,
-  list: ({ page, page_size, search, platform, genre }: IGameKeysList) =>
+  list: ({ page, search, platform, genre }: IGameKeysList) =>
     [
       ...gamesKeys.all,
       "list",
       {
         page,
-        page_size,
         search,
         platform,
         genre,

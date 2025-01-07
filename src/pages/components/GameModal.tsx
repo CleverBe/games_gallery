@@ -52,7 +52,7 @@ export const GameModal = ({ game, isOpen, onClose }: GameModalProps) => {
             <p className="mb-4 text-lg">Platforms:</p>
             <div className="mb-4 flex flex-wrap gap-2 text-lg">
               {game.platforms.map((platform) => (
-                <Badge key={platform.platform.id}>
+                <Badge key={platform.platform.id} variant="secondary">
                   {platform.platform.name}
                 </Badge>
               ))}

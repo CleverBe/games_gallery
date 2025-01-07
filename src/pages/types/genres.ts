@@ -11,10 +11,10 @@ export interface Result {
   slug: string;
   games_count: number;
   image_background: string;
-  games: Game[];
+  games: GenGame[];
 }
 
-export interface Game {
+export interface GenGame {
   id: number;
   slug: string;
   name: string;
