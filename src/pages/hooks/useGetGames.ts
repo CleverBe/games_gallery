@@ -3,6 +3,8 @@ import axios from "axios";
 import { gamesKeys } from "./queryKeys";
 import { GamesApiResponse } from "../types/games";
 
+export const apiUrl = "https://api.rawg.io/api/games";
+
 export const apiKey = "c3a8420f4b8c4fc19ce9828a7773deee";
 
 interface IgetGamesFn {
@@ -20,6 +22,8 @@ export const getGamesFn = async ({
 }: IgetGamesFn) => {
   const params = new URLSearchParams();
 
+  params.append("key", apiKey);
+
   params.append("page", pageParam.toString());
 
   params.append("page_size", "16");
@@ -36,12 +40,9 @@ export const getGamesFn = async ({
     params.append("genres", genre);
   }
 
-  const response = await axios.get<GamesApiResponse>(
-    `https://api.rawg.io/api/games?key=${apiKey}`,
-    {
-      params,
-    },
-  );
+  const response = await axios.get<GamesApiResponse>(apiUrl, {
+    params,
+  });
 
   return response.data;
 };

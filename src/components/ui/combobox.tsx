@@ -24,6 +24,7 @@ export interface ComboboxProps {
   value: string;
   setValue: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export const Combobox = ({
@@ -32,11 +33,19 @@ export const Combobox = ({
   options,
   placeholder = "",
   className,
+  disabled,
 }: ComboboxProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={() => {
+        if (disabled) return;
+
+        setOpen(!open);
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -45,6 +54,7 @@ export const Combobox = ({
           className={cn("w-[200px] justify-between", {
             "text-muted-foreground": !value,
           })}
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label

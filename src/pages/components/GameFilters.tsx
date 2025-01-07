@@ -10,6 +10,7 @@ interface GameFiltersProps {
   setGenre: (value: string) => void;
   platforms: { value: string; label: string }[];
   genres: { value: string; label: string }[];
+  disabled: boolean;
 }
 
 export const GameFilters = ({
@@ -21,6 +22,7 @@ export const GameFilters = ({
   setSearch,
   platforms,
   genres,
+  disabled,
 }: GameFiltersProps) => {
   return (
     <div className="mb-4 flex flex-wrap gap-4">
@@ -31,6 +33,7 @@ export const GameFilters = ({
           setValue={setPlatform}
           options={platforms}
           placeholder="Platforms"
+          disabled={disabled}
         />
       </div>
       <div className="flex flex-col space-y-2">
@@ -40,15 +43,17 @@ export const GameFilters = ({
           setValue={setGenre}
           options={genres}
           placeholder="Genres"
+          disabled={disabled}
         />
       </div>
       <div className="flex-1 self-end">
         <Input
           type="text"
-          placeholder="Minecraft, Fortnite, etc"
+          placeholder="Sonic, Mario, etc..."
           className="min-w-52 sm:w-96"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          disabled={disabled}
         />
       </div>
     </div>

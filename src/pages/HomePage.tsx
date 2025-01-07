@@ -28,6 +28,7 @@ export const HomePage = () => {
   const {
     data: games,
     isLoading,
+    isError,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
@@ -68,13 +69,20 @@ export const HomePage = () => {
           genres={mapGenres}
           search={search}
           setSearch={setSearch}
+          disabled={isError}
         />
-        <GamesList
-          games={flattenedGames}
-          isLoading={isLoading}
-          setIsOpen={setIsOpen}
-          setSelectedGame={setSelectedGame}
-        />
+        {isError ? (
+          <div className="bg-red-100 p-4 text-center text-sm text-red-500">
+            Something went wrong
+          </div>
+        ) : (
+          <GamesList
+            games={flattenedGames}
+            isLoading={isLoading}
+            setIsOpen={setIsOpen}
+            setSelectedGame={setSelectedGame}
+          />
+        )}
       </div>
 
       {hasNextPage && <LoadMoreTrigger fetchNextPage={fetchNextPage} />}
